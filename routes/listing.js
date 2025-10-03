@@ -8,37 +8,25 @@ const listingController=require("../controllers/listing.js");
 const multer  = require('multer')
 const {storage}=require("../cloudConfig.js")
 const upload = multer({storage});
-
-//Index Route
-// router.get("/", wrapAsync(listingController.index))
-// router.post("/",isLoggedIn,upload.single("listing[image]"),wrapAsync(listingController.createListing));
 router.route("/")
-    .get(wrapAsync(listingController.index))
-    .post(
-        isLoggedIn,
-        upload.single("listing[image]"), // Multer middleware for file upload
-        validateListing,
-        wrapAsync(listingController.createListing)
-    );
+  .get(wrapAsync(listingController.index))
+  .post(
+    upload.single("listing[image]"),
+    wrapAsync(listingController.createListing)
+  );
 
-//New Route
-router.get("/new",isLoggedIn,listingController.renderNewForm);
-     //here,isLoggedIn is a middleware which we have created and required at starting..
+// New
+router.get("/new", isLoggedIn, listingController.renderNewForm);
 
-//Show Route
+// Show
 router.get("/:id", wrapAsync(listingController.showListing));
 
-//Create Route
-router.post("/",isLoggedIn,validateListing,upload.single("listing[image]"),wrapAsync(listingController.createListing));
+// Edit
+router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
-//Edit Route
-router.get("/:id/edit",isLoggedIn,isOwner, wrapAsync(listingController.renderEditForm));
+// Update
+router.put("/:id", isLoggedIn, isOwner, validateListing, wrapAsync(listingController.updateListing));
 
-//Update Route
-router.put("/:id",isLoggedIn,isOwner,validateListing,wrapAsync(listingController.updateListing));
-
-//Delete Route
-router.delete("/:id",isLoggedIn,isOwner,wrapAsync(listingController.destroyListing));
-
-
+// Delete
+router.delete("/:id", isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
 module.exports = router;
