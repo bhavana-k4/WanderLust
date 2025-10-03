@@ -1,0 +1,26 @@
+<!-- Except body tag everything was removed..soo this line is written -->
+ <%layout("/layouts/boilerplate")%> 
+  <body>
+    <h3>All Listings</h3>
+    <!-- <form method="GET" action="/listings/new">
+      <button>Create New Listing</button>
+    </form> -->
+    <div class="row row-cols-lg-3  row-cols-md-2  row-cols-sm-1"> 
+      <!-- lg,md,sm are screen sizes..like in medium screen size 2 cards can be displayed in a linee etc... -->
+      <% for(let listing of allListings) { %>
+        <a href="/listings/<%=listing.id%>" class="listing-link">
+          <div class="card col listing-card">
+            <img src="<%=listing.image%>" class="card-img-top" alt="listing_image" style="height: 20rem";>
+            <div class="card-img-overlay"></div> <!-- to print anything inside(on) image -->
+            <div class="card-body">
+              <p class="card-text">
+                <b><%= listing.title %> <br/></b>
+                <%= listing.price.toLocaleString("en-IN")%>/night
+              </p>
+            </div>
+          </div>
+        </a>
+      <% } %>
+    </div>
+
+  </body>
