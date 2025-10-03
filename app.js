@@ -118,11 +118,4 @@ app.listen(8080,()=>{
     console.log("server is listening to port 8080")
 });
 
-// =======================================================
-// PASTE THE NEW CODE HERE
-// =======================================================
-// 404 Not Found Handler
-app.use((req, res, next) => {
-  next(new ExpressError(404, "Page Not Found!"));
-});
 
