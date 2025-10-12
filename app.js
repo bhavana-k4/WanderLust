@@ -102,13 +102,13 @@ app.all(/.*/, (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
 
-// // It’s a special Express function that catches any error thrown anywhere in your app.
-// app.use((err,req,res,next)=>{
-//   let {statusCode=500,message="Something went wrong"}=err;
-//   res.status(statusCode).render("error.ejs", { message });
-//   // res.render("error.ejs",{message});
-//   // res.status(statusCode).send(message);
-// })
+// It’s a special Express function that catches any error thrown anywhere in your app.
+app.use((err,req,res,next)=>{
+  let {statusCode=500,message="Something went wrong"}=err;
+  res.status(statusCode).render("error.ejs", { message });
+  // res.render("error.ejs",{message});
+  // res.status(statusCode).send(message);
+})
 
 // app.get("/",(req,res)=>{
 //     res.send("Hi,I am root");
