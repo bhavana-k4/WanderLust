@@ -8,6 +8,7 @@ const listingController=require("../controllers/listing.js");
 const multer  = require('multer')
 const {storage}=require("../cloudConfig.js")
 const upload = multer({storage});
+
 router.route("/")
   .get(wrapAsync(listingController.index))
   .post(
@@ -29,7 +30,7 @@ router.get("/:id", wrapAsync(listingController.showListing));
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingController.renderEditForm));
 
 // Update
-router.put("/:id", isLoggedIn, isOwner, validateListing, wrapAsync(listingController.updateListing));
+router.put("/:id", isLoggedIn, isOwner, upload.single("listing[image]"), validateListing, wrapAsync(listingController.updateListing));
 
 // Delete
 router.delete("/:id", isLoggedIn, isOwner, wrapAsync(listingController.destroyListing));
