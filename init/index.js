@@ -1,3 +1,11 @@
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+
+if (!process.env.MAP_TOKEN) {
+  console.error("ERROR: MAP_TOKEN is undefined. Make sure .env exists in project root and contains MAP_TOKEN=your_token_here");
+  process.exit(1);
+}
+
 require("dotenv").config();
 
 const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
@@ -9,7 +17,8 @@ const mongoose=require("mongoose");
 const initData=require("./data.js");
 const Listing=require("../models/listing.js");
 
-const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl=process.env.ATLASDB_URL;
+
 main()
  .then(()=>{
     console.log("connected to DB")
@@ -19,7 +28,7 @@ main()
  });
 
 async function main(){
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbUrl);
 };
 
 // const initDB=async ()=>{
