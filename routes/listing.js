@@ -18,10 +18,11 @@ router.route("/")
     wrapAsync(listingController.createListing)
   );
    
+//Search
+router.get("/search",listingController.searchListing);
 
 // New
 router.get("/new", isLoggedIn, listingController.renderNewForm);
-
 
 // Show
 router.get("/:id", wrapAsync(listingController.showListing));

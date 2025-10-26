@@ -3,6 +3,37 @@ const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');
 const mapToken=process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
+//Search logic 
+module.exports.searchListing = async (req, res) => {
+  const searchQuery = req.query.q; // user’s search text
+  // If user didn’t type anything, show all listings
+  if (!searchQuery) {
+    const allListings = await Listing.find({});
+    return res.render("listings/index.ejs", { allListings, searchQuery: "" });
+  }
+  const allListings = await Listing.find({});
+  // convert both search text and listing fields to lowercase
+  const filteredListings = allListings.filter(listing => {
+    return (
+      listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      listing.location.toLowerCase().includes(searchQuery.toLowerCase())||
+      listing.country.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
+  // 👉 Add this check (this is the line you asked for)
+  if (filteredListings.length === 0) {
+    req.flash("error", `No listings found for "${searchQuery}".`);
+    return res.redirect("/listings"); // redirect back to main listings page
+  }
+
+  res.render("listings/index.ejs", {
+    allListings: filteredListings,
+    searchQuery,
+  });
+};
+
+
+
 module.exports.index=async (req,res,next) => {
   const allListings = await Listing.find({}).populate("owner");
   res.render("listings/index.ejs", { allListings });
@@ -88,3 +119,5 @@ module.exports.destroyListing=async (req,res,next) => {
   req.flash("success","Listing deleted!!");
   res.redirect("/listings");
 };
+
+module
